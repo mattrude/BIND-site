@@ -1,0 +1,50 @@
+<div id="form" class="extract">
+    <form action="{{ site.url }}/pks/lookup" method="get">
+        <div class="key">
+            <label for="search" class="extract-field-label search">Search String:</label>
+            <input type="text" name="search" value="" class="extract-field search">
+        </div>
+        <div class="checkboxs options">
+            <b>Index options:</b>
+            <div>
+                <label for="fingerprint" class="extract-field-label fingerprint">Show PGP fingerprints</label>
+                <input type="checkbox" name="fingerprint" class="extract-field">
+            </div>
+            <div>
+                <label for="hash" class="extract-field-label hash">Show full-key hashes</label>
+                <input type="checkbox" name="hash" class="extract-field">
+            </div>
+            <div>
+                <label for="clean" class="extract-field-label exact">Restrict to exact matches</label>
+                <input type="checkbox" name="exact" value="on" class="extract-field">
+            </div>
+            <div>
+                <label for="mr" class="extract-field-label mr">Machine readable</label>
+                <input type="checkbox" name="options" value="mr" class="extract-field">
+            </div>
+        </div>
+        <div class="radio options">
+            <b>Index type:</b>
+            <div>
+                <input type="radio" name="op" value="index" class="extract-field" CHECKED>
+                <label for="op" class="extract-field-label op op-index">get regular index of keys</label>
+            </div>
+            <div>
+                <input type="radio" name="op" value="vindex" class="extract-field">
+                <label for="op" class="extract-field-label op op-index">get <b>verbose</b> index of keys</label>
+            </div>
+            <div>
+                <input type="radio" name="op" value="get" class="extract-field">
+                <label for="op" class="extract-field-label op op-index">retrieve ascii-armored keys</label>
+            </div>
+            <div>
+                <input type="radio" name="op" value="hget" class="extract-field">
+                <label for="op" class="extract-field-label op op-index">retrieve keys by full-key hash</label>
+            </div>
+        </div>
+        <div class="buttons">
+            <input type="reset" value="Reset">
+            <input type="submit">
+        </div>
+    </form>
+</div>

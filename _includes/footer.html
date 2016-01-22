@@ -1,0 +1,17 @@
+                {% if page.url contains 'guides' %}
+                    <div id="modifydate" style="font-size:0.8em;text-align:right"><small>Modified: {{ page.last_modified_at | date: '%d-%b-%Y'}}</small></div>
+                {% endif %}
+		<!-- Starting Footer Section -->
+		<div id="footer">
+			<div class="footer-left">
+				<p><a href="{{ site.url }}">Home</a> | <a href="{{ '/source/' | prepend: site.url }}">Source</a> | <a href="{{ '/changelog/' | prepend: site.url }}">Changelog</a></p>
+			</div>
+			<div class="footer-right">
+				<p>Copyright &copy; {{ site.time | date: "%Y" }} by {{ site.owner_name }}</p>
+			</div>
+		</div>
+	</div>
+</div>
+{% include analytics.html %}
+</body>
+</html>

@@ -1,0 +1,7 @@
+---
+path: /robots.txt
+---
+
+User-agent: *
+
+Sitemap: {{ "/sitemap.xml" | prepend: site.url }}
