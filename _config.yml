@@ -26,6 +26,7 @@ exclude:
 - css/syntax.less
 - css/site.less
 - css/small.less
+- bind-rrd-updater.sh
 
 gems:
 - jekyll-sitemap

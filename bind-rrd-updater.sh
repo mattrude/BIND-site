@@ -1,7 +1,7 @@
 #!/bin/bash
 
 RRDDIR="/var/lib/rrd/"
-img="/var/www/bind/img/"
+img="/var/www/bind-img/"
 rrdtool=/usr/bin/rrdtool
 RRDDB="${RRDDIR}/dns.rrd"
 
