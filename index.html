@@ -2,16 +2,16 @@
 layout: default
 ---
 
-<p>This is my DNS Server.</p>
+<p>Welcome to my personal authoritative Domain Name Service. This site provides information on my three DNS servers configured to run a number of domains. This service provides full DNSSEC support.</p>
 <h2>Statistics</h2>
 <center>
     <a href="/stats/"><img src="/img/dnsall-small.png" style="max-width: 99%;" /></a>
 </center>
 
-{% if site.posts == null %}
+{% if site.categories.first[0] != null %}
 <h2>Server Change Log</h2>
 <div id="news">
-<p>Below you will find the changelog for this DNS Service.</p>
+<p>Below you will find the changelog for this Authoritative DNS Service.</p>
 <ul>
   {% for post in site.posts %}
     <li>
