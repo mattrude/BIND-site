@@ -8,3 +8,17 @@ layout: default
     <a href="/stats/"><img src="/img/dnsall-small.png" style="max-width: 99%;" /></a>
 </center>
 
+{% if site.posts == null %}
+<h2>Server Change Log</h2>
+<div id="news">
+<p>Below you will find the changelog for this DNS Service.</p>
+<ul>
+  {% for post in site.posts %}
+    <li>
+      <h3><span id="category" class="{{ post.category }}">{{ post.category }}</span> <a href="{{ post.url }}">{{ post.date | date: '%Y-%b-%d' }} - {{ post.title }}</a></h3>
+      {{ post.excerpt }}
+    </li>
+  {% endfor %}
+</ul>
+</div>
+{% endif %}
