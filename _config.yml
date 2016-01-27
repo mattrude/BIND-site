@@ -28,6 +28,8 @@ exclude:
 - css/site.less
 - css/small.less
 - bind-rrd-updater.sh
+- ns2.yml
+- ns3.yml
 
 gems:
 - jekyll-sitemap
