@@ -100,7 +100,7 @@ do
         "GPRINT:minallu:%5.1lf %s   " \
         "GPRINT:maxallu:%5.1lf %s   \l" \
         "COMMENT:   " \
-        "LINE1:allt#0000FF:TCP Queries  " \
+        "LINE2:allt#0000FF:TCP Queries  " \
         "LINE1:allt#0000FF" \
         "GPRINT:lstallt:%5.1lf %s   " \
         "GPRINT:avgallt:%5.1lf %s   " \
@@ -115,44 +115,58 @@ do
         period1=`echo -n '-'; echo ${period}`
         period2=`echo ${period} |sed 's/1//g'`
 
-        echo "$period1 : $server : $period2"
+        #echo "$period1 : $server : $period2"
         $rrdtool graph $img/dns${server}-${period2}.png -s ${period1} \
-        -t "${server}.mattrude.com DNS traffic for the last ${period2}" -z \
+            -t "${server}.mattrude.com DNS traffic for the last ${period2}" -z \
+            -c "BACK#FFFFFF" -c "SHADEA#FFFFFF" -c "SHADEB#FFFFFF" \
+            -c "MGRID#AAAAAA" -c "GRID#CCCCCC" -c "ARROW#333333" \
+            -c "FONT#333333" -c "AXIS#333333" -c "FRAME#333333" \
+            -h 200 -w 650 -l 0 -a PNG -v "Requests/second" \
+            DEF:ns1u=$RRDDB:${server}u:AVERAGE \
+            DEF:ns1t=$RRDDB:${server}t:AVERAGE \
+            VDEF:minns1u=ns1u,MINIMUM \
+            VDEF:minns1t=ns1t,MINIMUM \
+            VDEF:maxns1u=ns1u,MAXIMUM \
+            VDEF:maxns1t=ns1t,MAXIMUM \
+            VDEF:avgns1u=ns1u,AVERAGE \
+            VDEF:avgns1t=ns1t,AVERAGE \
+            VDEF:lstns1u=ns1u,LAST \
+            VDEF:lstns1t=ns1t,LAST \
+            "COMMENT:  \l" \
+            "COMMENT:                          " \
+            "COMMENT:Current   " \
+            "COMMENT:Average   " \
+            "COMMENT:Minimum   " \
+            "COMMENT:Maximum   \l" \
+            "COMMENT:   " \
+            "AREA:ns1u#1A7200:UDP Queries " \
+            "LINE1:ns1u#1A7200" \
+            "GPRINT:lstns1u:%5.1lf %s   " \
+            "GPRINT:avgns1u:%5.1lf %s   " \
+            "GPRINT:minns1u:%5.1lf %s   " \
+            "GPRINT:maxns1u:%5.1lf %s   \l" \
+            "COMMENT:   " \
+            "LINE2:ns1t#0000FF:TCP Queries " \
+            "LINE1:ns1t#0000FF" \
+            "GPRINT:lstns1t:%5.1lf %s   " \
+            "GPRINT:avgns1t:%5.1lf %s   " \
+            "GPRINT:minns1t:%5.1lf %s   " \
+            "GPRINT:maxns1t:%5.1lf %s   \l" > /dev/null
+    done
+done
+
+for server in 1 2 3 4
+do
+
+    $rrdtool graph $img/dnsns${server}-small.png -s -6h -z \
         -c "BACK#FFFFFF" -c "SHADEA#FFFFFF" -c "SHADEB#FFFFFF" \
         -c "MGRID#AAAAAA" -c "GRID#CCCCCC" -c "ARROW#333333" \
         -c "FONT#333333" -c "AXIS#333333" -c "FRAME#333333" \
-        -h 200 -w 650 -l 0 -a PNG -v "Requests/second" \
-        DEF:ns1u=$RRDDB:${server}u:AVERAGE \
-        DEF:ns1t=$RRDDB:${server}t:AVERAGE \
-        VDEF:minns1u=ns1u,MINIMUM \
-        VDEF:minns1t=ns1t,MINIMUM \
-        VDEF:maxns1u=ns1u,MAXIMUM \
-        VDEF:maxns1t=ns1t,MAXIMUM \
-        VDEF:avgns1u=ns1u,AVERAGE \
-        VDEF:avgns1t=ns1t,AVERAGE \
-        VDEF:lstns1u=ns1u,LAST \
-        VDEF:lstns1t=ns1t,LAST \
-        "COMMENT:  \l" \
-        "COMMENT:                          " \
-        "COMMENT:Current   " \
-        "COMMENT:Average   " \
-        "COMMENT:Minimum   " \
-        "COMMENT:Maximum   \l" \
-        "COMMENT:   " \
-        "AREA:ns1u#1A7200:UDP Queries " \
-        "LINE1:ns1u#1A7200" \
-        "GPRINT:lstns1u:%5.1lf %s   " \
-        "GPRINT:avgns1u:%5.1lf %s   " \
-        "GPRINT:minns1u:%5.1lf %s   " \
-        "GPRINT:maxns1u:%5.1lf %s   \l" \
-        "COMMENT:   " \
-        "LINE1:ns1t#0000FF:TCP Queries " \
-        "LINE1:ns1t#0000FF" \
-        "GPRINT:lstns1t:%5.1lf %s   " \
-        "GPRINT:avgns1t:%5.1lf %s   " \
-        "GPRINT:minns1t:%5.1lf %s   " \
-        "GPRINT:maxns1t:%5.1lf %s   \l" > /dev/null
-    done
+        -h 100 -w 300 -l 0 -a PNG \
+        DEF:ns${server}u=$RRDDB:ns${server}u:AVERAGE \
+        DEF:ns${server}t=$RRDDB:ns${server}t:AVERAGE \
+        "AREA:ns${server}u#1A7200" \
+        "LINE2:ns${server}t#0000FF" > /dev/null
 done
 
 $rrdtool graph $img/dnsall-small.png -s -6h -z \
@@ -163,7 +177,7 @@ $rrdtool graph $img/dnsall-small.png -s -6h -z \
     DEF:allu=$RRDDB:allu:AVERAGE \
     DEF:allt=$RRDDB:allt:AVERAGE \
     "AREA:allu#1A7200" \
-    "LINE1:allt#0000FF" > /dev/null
+    "LINE2:allt#0000FF" > /dev/null
 
 $rrdtool graph $img/queries-small.png -s -6h -z \
     -c "BACK#FFFFFF" -c "SHADEA#FFFFFF" -c "SHADEB#FFFFFF" \
@@ -180,17 +194,4 @@ $rrdtool graph $img/queries-small.png -s -6h -z \
     "LINE1:ns3#2AB352" \
     "LINE1:ns4#ff9900" \
     "LINE1:all#000000" > /dev/null
-for server in 1 2 3 4
-do
-
-    $rrdtool graph $img/dnsns${server}-small.png -s -6h -z \
-        -c "BACK#FFFFFF" -c "SHADEA#FFFFFF" -c "SHADEB#FFFFFF" \
-        -c "MGRID#AAAAAA" -c "GRID#CCCCCC" -c "ARROW#333333" \
-        -c "FONT#333333" -c "AXIS#333333" -c "FRAME#333333" \
-        -h 100 -w 300 -l 0 -a PNG \
-        DEF:ns${server}u=$RRDDB:ns${server}u:AVERAGE \
-        DEF:ns${server}t=$RRDDB:ns${server}t:AVERAGE \
-        "AREA:ns${server}u#1A7200" \
-        "LINE1:ns${server}t#0000FF" > /dev/null
-done
 
