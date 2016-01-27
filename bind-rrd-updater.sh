@@ -1,10 +1,11 @@
 #!/bin/bash
 
-RRDDIR="/var/lib/rrd/"
+RRDDIR="/var/lib/rrd"
 img="/var/www/bind-img/"
 rrdtool=/usr/bin/rrdtool
 RRDDB="${RRDDIR}/dns.rrd"
 
+mkdir -p $RRDDIR
 
 if [ ! -e $RRDDB ]
 then 
@@ -46,10 +47,19 @@ if [ -z "${NS3QTCP}" ]; then NS3QTCP=0; fi
 if [ -z "${NS4QUDP}" ]; then NS4QUDP=0; fi
 if [ -z "${NS4QTCP}" ]; then NS4QTCP=0; fi
 
+if [ "${NS1QUDP}" ]; then NS1QUDP=0; fi
+if [ "${NS1QTCP}" == "null" ]; then NS1QTCP=0; fi
+if [ "${NS2QUDP}" == "null" ]; then NS2QUDP=0; fi
+if [ "${NS2QTCP}" == "null" ]; then NS2QTCP=0; fi
+if [ "${NS3QUDP}" == "null" ]; then NS3QUDP=0; fi
+if [ "${NS3QTCP}" == "null" ]; then NS3QTCP=0; fi
+if [ "${NS4QUDP}" == "null" ]; then NS4QUDP=0; fi
+if [ "${NS4QTCP}" == "null" ]; then NS4QTCP=0; fi
+
 QUERYALL="$(($NS1QUDP+$NS1QTCP+$NS2QUDP+$NS2QTCP+$NS3QUDP+$NS3QTCP+$NS4QUDP+$NS4QTCP))"
 QUERYALLU="$(($NS1QUDP+$NS2QUDP+$NS3QUDP+$NS4QUDP))"
 QUERYALLT="$(($NS1QTCP+$NS2QTCP+$NS3QTCP+$NS4QTCP))"
-#echo "$NS1QUDP $NS1QTCP $NS2QUDP $NS2QTCP $NS3QUDP $NS3QTCP $NS4QUDP $NS4QTCP $QUERYALLU $QUERYALLT $QUERYALL"
+echo "$NS1QUDP $NS1QTCP $NS2QUDP $NS2QTCP $NS3QUDP $NS3QTCP $NS4QUDP $NS4QTCP $QUERYALLU $QUERYALLT $QUERYALL"
 
 mkdir -p $RRDDIR
 $rrdtool update $RRDDB -t ns1u:ns1t:ns2u:ns2t:ns3u:ns3t:ns4u:ns4t:allu:allt:all N:$NS1QUDP:$NS1QTCP:$NS2QUDP:$NS2QTCP:$NS3QUDP:$NS3QTCP:$NS4QUDP:$NS4QTCP:$QUERYALLU:$QUERYALLT:$QUERYALL
