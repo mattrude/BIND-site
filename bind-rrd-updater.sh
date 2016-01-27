@@ -6,11 +6,8 @@ rrdtool=/usr/bin/rrdtool
 RRDDB="${RRDDIR}/dns.rrd"
 
 mkdir -p $RRDDIR
-
-if [ ! -e $RRDDB ]
-then 
-	$rrdtool create $RRDDB \
-        --step 300 \
+if [ ! -e $RRDDB ]; then 
+    $rrdtool create $RRDDB --step 300 \
 	DS:ns1u:COUNTER:600:0:1000000 \
 	DS:ns1t:COUNTER:600:0:1000000 \
 	DS:ns2u:COUNTER:600:0:1000000 \
@@ -27,7 +24,6 @@ then
 	RRA:AVERAGE:0.5:24:732 \
 	RRA:AVERAGE:0.5:144:1460
 fi
-
 
 NS1QUDP=`curl -sL http://ns1.mattrude.com:8053/json |jq .nsstats.QryUDP`
 NS1QTCP=`curl -sL http://ns1.mattrude.com:8053/json |jq .nsstats.QryTCP`

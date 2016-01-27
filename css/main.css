@@ -1,0 +1,133 @@
+body {
+  color: black;
+  background: #ffffff;
+  font-family: "lucida grande", Calibri, "segoe UI", "lucida sans unicode", "Droid Sans", "DejaVu Sans", "bitstream vera sans", verdana, arial, helvetica, sans-serif;
+  margin: 0;
+  font-size: 1em;
+}
+#content {
+  color: black;
+  background: #ffffff;
+  margin-top: 0.5em;
+  margin-bottom: 0.5em;
+  margin-right: auto;
+  margin-left: auto;
+  padding: 0 1em;
+  line-height: 1.3em;
+  text-align: left;
+  max-width: 800px;
+  min-width: 240px;
+  position: relative;
+}
+#header h1 {
+  line-height: 1em;
+}
+#header h4 {
+  -webkit-margin-before: -0.8em;
+  -webkit-margin-after: 1.0em;
+}
+#category {
+  width: 100px;
+  padding: 5px;
+  margin: 5px;
+}
+#category.ALL {
+  color: white;
+  background-color: black;
+}
+#category.NS1 {
+  background-color: blue;
+}
+#category.NS2 {
+  background-color: red;
+}
+#category.NS3 {
+  background-color: green;
+}
+h2 {
+  font-weight: normal;
+  margin-bottom: 8px;
+  padding: 2px;
+  padding-top: 10px;
+  border-bottom: 1px solid #CCC;
+}
+a {
+  text-decoration: none;
+  color: #0078e7;
+}
+a,
+a:visited {
+  color: #0078e7;
+  background: inherit;
+}
+a:hover {
+  text-decoration: underline;
+  color: #0078e7;
+}
+#footer {
+  font-size: 80%;
+  border-top: 1px solid #CCC;
+}
+.footer-left {
+  text-align: left;
+  float: left;
+  width: 34%;
+}
+.footer-right {
+  display: block;
+  text-align: right;
+  float: right;
+  width: 64%;
+}
+img {
+  border-width: 0px;
+}
+div.code,
+p code {
+  font-family: Monaco, Consolas, 'Lucida Console', "Droid Sans Mono", "DejaVu Sans Mono", Courier, monospace;
+  font-size: 14px;
+  background-color: #eee;
+  border: 1px solid #999;
+  padding: 0 2px;
+  margin: 0 2px;
+}
+pre,
+pre.code {
+  font-family: Monaco, Consolas, 'Lucida Console', "Droid Sans Mono", "DejaVu Sans Mono", Courier, monospace;
+  font-size: 14px;
+  width: auto;
+  overflow: auto;
+  background-color: #eee;
+  color: inherit;
+  border: 1px solid #999;
+  line-height: 1.3em;
+  padding: 5px;
+}
+pre.code {
+  border: 0;
+}
+h4 small {
+  line-height: 1;
+  color: #777;
+}
+#menu {
+  border-bottom: 1px solid #CCC;
+  border-top: 1px solid #CCC;
+  font-size: 0.9em;
+  margin: 5px 0 20px 0;
+  padding-left: 5px;
+  line-height: 1.5em;
+}
+#menu a {
+  font-weight: bold;
+}
+#news ul {
+  -webkit-padding-start: 0px;
+}
+#news li {
+  list-style-type: none;
+}
+#news h2 {
+  padding: 0px;
+  border-bottom: none;
+}

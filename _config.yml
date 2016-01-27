@@ -27,19 +27,20 @@ exclude:
 - css/syntax.less
 - css/site.less
 - css/small.less
+- css/main.less
 - bind-rrd-updater.sh
 - ns2.yml
 - ns3.yml
 
 gems:
 - jekyll-sitemap
-- jekyll-less
-#- jekyll-press
+#- jekyll-less
+- jekyll-press
 - jekyll-redirect-from
 - jekyll-last-modified-at
 
 jekyll-press:
   exclude: 'robots.txt' # Exclude files from processing - file name, glob pattern or array of file names and glob patterns
   js_options: {}      # js minifier options
-  css_options: {}     # css minifier options
+  css_options: { 'main.css' }     # css minifier options
   html_options: {}    # html minifier options
