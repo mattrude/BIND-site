@@ -59,16 +59,19 @@ if [ "${NS4QTCP}" == "null" ]; then NS4QTCP=0; fi
 QUERYALL="$(($NS1QUDP+$NS1QTCP+$NS2QUDP+$NS2QTCP+$NS3QUDP+$NS3QTCP+$NS4QUDP+$NS4QTCP))"
 QUERYALLU="$(($NS1QUDP+$NS2QUDP+$NS3QUDP+$NS4QUDP))"
 QUERYALLT="$(($NS1QTCP+$NS2QTCP+$NS3QTCP+$NS4QTCP))"
-echo "$NS1QUDP $NS1QTCP $NS2QUDP $NS2QTCP $NS3QUDP $NS3QTCP $NS4QUDP $NS4QTCP $QUERYALLU $QUERYALLT $QUERYALL"
+#echo "$NS1QUDP $NS1QTCP $NS2QUDP $NS2QTCP $NS3QUDP $NS3QTCP $NS4QUDP $NS4QTCP $QUERYALLU $QUERYALLT $QUERYALL"
 
 mkdir -p $RRDDIR
 $rrdtool update $RRDDB -t ns1u:ns1t:ns2u:ns2t:ns3u:ns3t:ns4u:ns4t:allu:allt:all N:$NS1QUDP:$NS1QTCP:$NS2QUDP:$NS2QTCP:$NS3QUDP:$NS3QTCP:$NS4QUDP:$NS4QTCP:$QUERYALLU:$QUERYALLT:$QUERYALL
 
 mkdir -p $img
-for period in 6h day week month year
+for period in 6h 1day 1week 1month 1year
 do
-	$rrdtool graph $img/dnsall-${period}.png -s -1${period} \
-	-t "ALL DNS Service traffic for the last ${period}" -z \
+        time=`echo ${period} |sed 's/1//g'`
+        period=`echo -n '-'; echo ${period}`
+     echo "${period} : ${time}"
+	$rrdtool graph $img/dnsall-${time}.png -s ${period} \
+	-t "ALL DNS Service traffic for the last ${time}" -z \
 	-c "BACK#FFFFFF" -c "SHADEA#FFFFFF" -c "SHADEB#FFFFFF" \
 	-c "MGRID#AAAAAA" -c "GRID#CCCCCC" -c "ARROW#333333" \
 	-c "FONT#333333" -c "AXIS#333333" -c "FRAME#333333" \
@@ -104,8 +107,8 @@ do
         "GPRINT:minallt:%5.1lf %s   " \
         "GPRINT:maxallt:%5.1lf %s   \l" > /dev/null
 
-        $rrdtool graph $img/dnsns1-${period}.png -s -1${period} \
-        -t "ns1.mattrude.com DNS traffic for the last ${period}" -z \
+        $rrdtool graph $img/dnsns1-${time}.png -s ${period} \
+        -t "ns1.mattrude.com DNS traffic for the last ${time}" -z \
         -c "BACK#FFFFFF" -c "SHADEA#FFFFFF" -c "SHADEB#FFFFFF" \
         -c "MGRID#AAAAAA" -c "GRID#CCCCCC" -c "ARROW#333333" \
         -c "FONT#333333" -c "AXIS#333333" -c "FRAME#333333" \
@@ -141,8 +144,8 @@ do
         "GPRINT:minns1t:%5.1lf %s   " \
         "GPRINT:maxns1t:%5.1lf %s   \l" > /dev/null
 
-        $rrdtool graph $img/dnsns2-${period}.png -s -1${period} \
-        -t "ns2.mattrude.com DNS traffic for the last ${period}" -z \
+        $rrdtool graph $img/dnsns2-${time}.png -s ${period} \
+        -t "ns2.mattrude.com DNS traffic for the last ${time}" -z \
         -c "BACK#FFFFFF" -c "SHADEA#FFFFFF" -c "SHADEB#FFFFFF" \
         -c "MGRID#AAAAAA" -c "GRID#CCCCCC" -c "ARROW#333333" \
         -c "FONT#333333" -c "AXIS#333333" -c "FRAME#333333" \
@@ -178,8 +181,8 @@ do
         "GPRINT:minns2t:%5.1lf %s   " \
         "GPRINT:maxns2t:%5.1lf %s   \l" > /dev/null
 
-        $rrdtool graph $img/dnsns3-${period}.png -s -1${period} \
-        -t "ns3.mattrude.com DNS traffic for the last ${period}" -z \
+        $rrdtool graph $img/dnsns3-${time}.png -s ${period} \
+        -t "ns3.mattrude.com DNS traffic for the last ${time}" -z \
         -c "BACK#FFFFFF" -c "SHADEA#FFFFFF" -c "SHADEB#FFFFFF" \
         -c "MGRID#AAAAAA" -c "GRID#CCCCCC" -c "ARROW#333333" \
         -c "FONT#333333" -c "AXIS#333333" -c "FRAME#333333" \
@@ -215,8 +218,8 @@ do
         "GPRINT:minns3t:%5.1lf %s   " \
         "GPRINT:maxns3t:%5.1lf %s   \l" > /dev/null
 
-        $rrdtool graph $img/dnsns4-${period}.png -s -1${period} \
-        -t "ns4.mattrude.com DNS traffic for the last ${period}" -z \
+        $rrdtool graph $img/dnsns4-${time}.png -s ${period} \
+        -t "ns4.mattrude.com DNS traffic for the last ${time}" -z \
         -c "BACK#FFFFFF" -c "SHADEA#FFFFFF" -c "SHADEB#FFFFFF" \
         -c "MGRID#AAAAAA" -c "GRID#CCCCCC" -c "ARROW#333333" \
         -c "FONT#333333" -c "AXIS#333333" -c "FRAME#333333" \
@@ -253,8 +256,8 @@ do
         "GPRINT:maxns4t:%5.1lf %s   \l" > /dev/null
 
 
-	$rrdtool graph $img/network-${period}.png -s -1${period} \
-	-t "DNS Service traffic for the last ${period}" -z \
+	$rrdtool graph $img/network-${time}.png -s ${period} \
+	-t "DNS Service traffic for the last ${time}" -z \
 	-c "BACK#FFFFFF" -c "SHADEA#FFFFFF" -c "SHADEB#FFFFFF" \
 	-c "MGRID#AAAAAA" -c "GRID#CCCCCC" -c "ARROW#333333" \
 	-c "FONT#333333" -c "AXIS#333333" -c "FRAME#333333" \
