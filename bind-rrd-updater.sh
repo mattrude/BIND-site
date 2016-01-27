@@ -47,7 +47,7 @@ if [ -z "${NS3QTCP}" ]; then NS3QTCP=0; fi
 if [ -z "${NS4QUDP}" ]; then NS4QUDP=0; fi
 if [ -z "${NS4QTCP}" ]; then NS4QTCP=0; fi
 
-if [ "${NS1QUDP}" ]; then NS1QUDP=0; fi
+if [ "${NS1QUDP}" == "null" ]; then NS1QUDP=0; fi
 if [ "${NS1QTCP}" == "null" ]; then NS1QTCP=0; fi
 if [ "${NS2QUDP}" == "null" ]; then NS2QUDP=0; fi
 if [ "${NS2QTCP}" == "null" ]; then NS2QTCP=0; fi
