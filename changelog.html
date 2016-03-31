@@ -9,7 +9,7 @@ title: Changelog
 <ul>
   {% for post in site.posts %}
     <li>
-      <h3><span id="category" class="{{ post.category }}">{{ post.category }}</span> <a href="{{ post.url }}">{{ post.date | date: '%Y-%b-%d' }} - {{ post.title }}</a></h3>
+      <h3><div id="category" class="{{ post.category }}">{{ post.category }}</div> {{ post.date | date: '%Y-%b-%d' }} - <a href="{{ post.url }}">{{ post.title }}</a></h3>
       {{ post.excerpt }}
     </li>
   {% endfor %}

@@ -2,9 +2,7 @@
 layout: default
 ---
 
-<p>You are accessing my personal authoritative <b>D</b>omain <b>N</b>ame <b>S</b>ystem (<b>DNS</b>) service. This site provides information on my <a href="https://en.wikipedia.org/wiki/Name_server" target="_blank">DNS</a> servers configured to run a number of domains. This service provides full DNSSEC support.</p>
-
-<h2>About the Servers</h2>
+<p>You are accessing my personal <a href="https://en.wikipedia.org/wiki/Name_server#Authoritative_name_server" target="_blank">authoritative</a> <b>D</b>omain <b>N</b>ame <b>S</b>ystem (<b>DNS</b>) service. This site provides information on my <a href="https://en.wikipedia.org/wiki/Name_server" target="_blank">DNS</a> servers configured to run a number of domains. This service provides full DNSSEC support.</p>
 
 <ul>
     <li><b>ns1.mattrude.com</b> - The <i>master</i> DNS server, located in New York, New York, USA, running <a href="https://www.isc.org/downloads/bind/" target="_blank">BIND</a>.</li>
@@ -16,17 +14,17 @@ layout: default
 
 <h2>Statistics</h2>
 <center>
-    <a href="/stats/"><img src="{{ site.url }}/img/dnsall-small.png" height='191px' width='631px' style="max-width: 99%;" /></a>
+    <a href="/stats/"><img src="{{ site.url }}/img/dnsall-small.png" height='auto' width='771px' style="max-width: 99%;" /></a>
 </center>
 
 {% if site.categories.first[0] != null %}
-<h2>Server Change Log</h2>
+<h2>Service Changelog</h2>
 <div id="news">
 <p>Below you will find the changelog for this Authoritative DNS Service.</p>
 <ul>
   {% for post in site.posts %}
     <li>
-      <h3><span id="category" class="{{ post.category }}">{{ post.category }}</span> <a href="{{ post.url | remove_first:'/'}}">{{ post.date | date: '%Y-%b-%d' }} - {{ post.title }}</a></h3>
+      <h3><div id="category" class="{{ post.category }}">{{ post.category }}</div> {{ post.date | date: '%Y-%b-%d' }} - <a href="{{ post.url | remove_first:'/'}}">{{ post.title }}</a></h3>
       {{ post.excerpt }}
     </li>
   {% endfor %}

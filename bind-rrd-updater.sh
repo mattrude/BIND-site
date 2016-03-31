@@ -4,35 +4,47 @@ RRDDIR="/var/lib/rrd"
 img="/var/www/bind-img/"
 rrdtool=/usr/bin/rrdtool
 RRDDB="${RRDDIR}/dns.rrd"
+CURRENTTIME=`TZ='UTC' date |sed 's/\:/\\\:/g'`
+
+sleep $[ ( $RANDOM % 10 )  + 1 ]s
 
 mkdir -p $RRDDIR
 if [ ! -e $RRDDB ]; then 
     $rrdtool create $RRDDB --step 300 \
-	DS:ns1u:COUNTER:600:0:1000000 \
-	DS:ns1t:COUNTER:600:0:1000000 \
-	DS:ns2u:COUNTER:600:0:1000000 \
-	DS:ns2t:COUNTER:600:0:1000000 \
-	DS:ns3u:COUNTER:600:0:1000000 \
-	DS:ns3t:COUNTER:600:0:1000000 \
-	DS:ns4u:COUNTER:600:0:1000000 \
-	DS:ns4t:COUNTER:600:0:1000000 \
-	DS:allu:COUNTER:600:0:1000000 \
-	DS:allt:COUNTER:600:0:1000000 \
-	DS:all:COUNTER:600:0:1000000 \
+	DS:ns1u:COUNTER:600:0:100000 \
+	DS:ns1t:COUNTER:600:0:100000 \
+	DS:ns2u:COUNTER:600:0:100000 \
+	DS:ns2t:COUNTER:600:0:100000 \
+	DS:ns3u:COUNTER:600:0:100000 \
+	DS:ns3t:COUNTER:600:0:100000 \
+	DS:ns4u:COUNTER:600:0:100000 \
+	DS:ns4t:COUNTER:600:0:100000 \
+	DS:allu:COUNTER:600:0:100000 \
+	DS:allt:COUNTER:600:0:100000 \
+	DS:all:COUNTER:600:0:100000 \
 	RRA:AVERAGE:0.5:1:600 \
 	RRA:AVERAGE:0.5:6:672 \
 	RRA:AVERAGE:0.5:24:732 \
-	RRA:AVERAGE:0.5:144:1460
+	RRA:AVERAGE:0.5:144:1460 \
+	RRA:AVERAGE:0.5:288:2920
 fi
 
-NS1QUDP=`curl -sL http://ns1.mattrude.com:8053/json |jq .nsstats.QryUDP`
-NS1QTCP=`curl -sL http://ns1.mattrude.com:8053/json |jq .nsstats.QryTCP`
-NS2QUDP=`curl -sL http://ns2.mattrude.com:8053/json |jq .nsstats.QryUDP`
-NS2QTCP=`curl -sL http://ns2.mattrude.com:8053/json |jq .nsstats.QryTCP`
-NS3QUDP=`curl -sL http://ns3.mattrude.com:8053/json |jq .nsstats.QryUDP`
-NS3QTCP=`curl -sL http://ns3.mattrude.com:8053/json |jq .nsstats.QryTCP`
-NS4QUDP=`curl -sL http://ns4.mattrude.com:8053/json |jq .nsstats.QryUDP`
-NS4QTCP=`curl -sL http://ns4.mattrude.com:8053/json |jq .nsstats.QryTCP`
+mkdir -p /tmp
+for HOST in ns1 ns2 ns3 ns4
+do
+    curl -sL http://${HOST}.mattrude.com:8053/json > /tmp/${HOST}
+done
+
+NS1QUDP=`cat /tmp/ns1 |jq .nsstats.QryUDP`
+NS1QTCP=`cat /tmp/ns1 |jq .nsstats.QryTCP`
+NS2QUDP=`cat /tmp/ns2 |jq .nsstats.QryUDP`
+NS2QTCP=`cat /tmp/ns2 |jq .nsstats.QryTCP`
+NS3QUDP=`cat /tmp/ns3 |jq .nsstats.QryUDP`
+NS3QTCP=`cat /tmp/ns3 |jq .nsstats.QryTCP`
+NS4QUDP=`cat /tmp/ns4 |jq .nsstats.QryUDP`
+NS4QTCP=`cat /tmp/ns4 |jq .nsstats.QryTCP`
+
+#rm -f /tmp/ns1 /tmp/ns2 /tmp/ns3 /tmp/ns4
 
 if [ -z "${NS1QUDP}" ]; then NS1QUDP=0; fi
 if [ -z "${NS1QTCP}" ]; then NS1QTCP=0; fi
@@ -70,7 +82,7 @@ do
 	-c "BACK#FFFFFF" -c "SHADEA#FFFFFF" -c "SHADEB#FFFFFF" \
 	-c "MGRID#AAAAAA" -c "GRID#CCCCCC" -c "ARROW#333333" \
 	-c "FONT#333333" -c "AXIS#333333" -c "FRAME#333333" \
-        -h 200 -w 650 -l 0 -a PNG -v "Requests/minute" \
+        -h 200 -w 690 -l 0 -a PNG -v "Requests/minute" \
 	DEF:allus=$RRDDB:allu:AVERAGE \
 	DEF:allts=$RRDDB:allt:AVERAGE \
         CDEF:allu=allus,60,* \
@@ -102,7 +114,9 @@ do
         "GPRINT:lstallt:%5.1lf %s   " \
         "GPRINT:avgallt:%5.1lf %s   " \
         "GPRINT:minallt:%5.1lf %s   " \
-        "GPRINT:maxallt:%5.1lf %s   \l" > /dev/null
+        "GPRINT:maxallt:%5.1lf %s   \l" \
+        "COMMENT: \l" \
+        "COMMENT:                                                            Last Updated\: $CURRENTTIME \l" > /dev/null
 
 
 	$rrdtool graph $img/network-${time}.png -s -1${period} \
@@ -110,7 +124,7 @@ do
 	-c "BACK#FFFFFF" -c "SHADEA#FFFFFF" -c "SHADEB#FFFFFF" \
 	-c "MGRID#AAAAAA" -c "GRID#CCCCCC" -c "ARROW#333333" \
 	-c "FONT#333333" -c "AXIS#333333" -c "FRAME#333333" \
-        -h 200 -w 650 -l 0 -a PNG -v "Requests/second" \
+        -h 200 -w 690 -l 0 -a PNG -v "Requests/second" \
 	DEF:ns1us=$RRDDB:ns1u:AVERAGE \
 	DEF:ns2us=$RRDDB:ns2u:AVERAGE \
 	DEF:ns3us=$RRDDB:ns3u:AVERAGE \
@@ -192,7 +206,9 @@ do
         "GPRINT:avgall:%5.1lf %s   " \
         "GPRINT:minall:%5.1lf %s   " \
         "GPRINT:maxall:%5.1lf %s   " \
-        "GPRINT:totall:%5.1lf %s   \l" > /dev/null
+        "GPRINT:totall:%5.1lf %s   \l" \
+        "COMMENT: \l" \
+        "COMMENT:                                                            Last Updated\: $CURRENTTIME \l" > /dev/null
 done
 
 for period in 6h 1day 1week 1month 1year
@@ -206,7 +222,7 @@ do
             -c "BACK#FFFFFF" -c "SHADEA#FFFFFF" -c "SHADEB#FFFFFF" \
             -c "MGRID#AAAAAA" -c "GRID#CCCCCC" -c "ARROW#333333" \
             -c "FONT#333333" -c "AXIS#333333" -c "FRAME#333333" \
-            -h 200 -w 650 -l 0 -a PNG -v "Requests/minute" \
+            -h 200 -w 690 -l 0 -a PNG -v "Requests/minute" \
             DEF:ns1us=$RRDDB:${server}u:AVERAGE \
             DEF:ns1ts=$RRDDB:${server}t:AVERAGE \
             CDEF:ns1u=ns1us,60,* \
@@ -238,7 +254,9 @@ do
             "GPRINT:lstns1t:%5.1lf %s   " \
             "GPRINT:avgns1t:%5.1lf %s   " \
             "GPRINT:minns1t:%5.1lf %s   " \
-            "GPRINT:maxns1t:%5.1lf %s   \l" > /dev/null
+            "GPRINT:maxns1t:%5.1lf %s   \l" \
+            "COMMENT: \l" \
+            "COMMENT:                                                            Last Updated\: $CURRENTTIME \l" > /dev/null
     done
 done
 
@@ -262,19 +280,20 @@ $rrdtool graph $img/dnsall-small.png -s -6h -z \
     -c "BACK#FFFFFF" -c "SHADEA#FFFFFF" -c "SHADEB#FFFFFF" \
     -c "MGRID#AAAAAA" -c "GRID#CCCCCC" -c "ARROW#333333" \
     -c "FONT#333333" -c "AXIS#333333" -c "FRAME#333333" \
-    -h 150 -w 550 -l 0 -a PNG \
+    -h 150 -w 690 -l 0 -a PNG \
     DEF:allus=$RRDDB:allu:AVERAGE \
     DEF:allts=$RRDDB:allt:AVERAGE \
     CDEF:allu=allus,60,* \
     CDEF:allt=allts,60,* \
     "AREA:allu#1A7200" \
-    "LINE2:allt#000099" > /dev/null
+    "LINE2:allt#000099" \
+    "COMMENT:                                                                Last Updated\: $CURRENTTIME \l" > /dev/null
 
 $rrdtool graph $img/queries-small.png -s -6h -z \
     -c "BACK#FFFFFF" -c "SHADEA#FFFFFF" -c "SHADEB#FFFFFF" \
     -c "MGRID#AAAAAA" -c "GRID#CCCCCC" -c "ARROW#333333" \
     -c "FONT#333333" -c "AXIS#333333" -c "FRAME#333333" \
-    -h 150 -w 550 -l 0 -a PNG \
+    -h 150 -w 690 -l 0 -a PNG \
     DEF:ns1s=$RRDDB:ns1u:AVERAGE \
     DEF:ns2s=$RRDDB:ns2u:AVERAGE \
     DEF:ns3s=$RRDDB:ns3u:AVERAGE \
