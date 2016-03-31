@@ -22,12 +22,11 @@ This site is maintained by [Matt Rude](http://mattrude.com). If you would like t
     pub = nistp256/03305F35 2015-02-15
     fingerprint = 77F1 D65B 5FF0 54DC 9286  6078 0314 CD85 0330 5F35
 
-Or, you may validate my keys using one of my [DANE](https://keyserver.mattrude.com/guides/dns-dane-cert-records/) or [PKA](https://keyserver.mattrude.com/guides/dns-dane-cert-records//guides/public-key-association/) DNS records.
+Or, you may validate my keys using one of my [DANE](http://keyserver.mattrude.com/guides/dns-dane-cert-records/) or [PKA](http://keyserver.mattrude.com/guides/dns-dane-cert-records//guides/public-key-association/) DNS records.
 
 ### Signed Contact Information
 
-A signed copy of this infromation, using my [RSA key](https://keyserver.mattrude.com/k/0xc4909ee495b0761f) may be found [here](https://keyserver.mattrude.com/contact.txt), or using my [ECC key](https://keyserver.mattrude.com/k/0x0314CD8503305F35), may be found [here](https://keyserver.mattrude.com/contact-ecc.txt). You may validate these files by running the below commands:
+A signed copy of this infromation, using my [RSA key](http://keyserver.mattrude.com/k/0xc4909ee495b0761f) may be found [here](http://keyserver.mattrude.com/contact.txt), or using my [ECC key](http://keyserver.mattrude.com/k/0x0314CD8503305F35), may be found [here](http://keyserver.mattrude.com/contact-ecc.txt). You may validate these files by running the below commands:
 
-    curl -s https://keyserver.mattrude.com/contact.txt |gpg --keyserver-options auto-key-retrieve --auto-key-locate pka --verify
-    curl -s https://keyserver.mattrude.com/contact-ecc.txt |gpg2 --keyserver-options auto-key-retrieve --auto-key-locate pka --verify
-
+<pre><code><small>curl -s http://mattrude.com/contact.txt |gpg --keyserver-options auto-key-retrieve --auto-key-locate pka --verify
+curl -s http://mattrude.com/contact-ecc.txt |gpg2 --keyserver-options auto-key-retrieve --auto-key-locate pka --verify</small></code></pre>

@@ -73,11 +73,12 @@ mkdir -p $RRDDIR
 $rrdtool update $RRDDB -t ns1u:ns1t:ns2u:ns2t:ns3u:ns3t:ns4u:ns4t:allu:allt:all N:$NS1QUDP:$NS1QTCP:$NS2QUDP:$NS2QTCP:$NS3QUDP:$NS3QTCP:$NS4QUDP:$NS4QTCP:$QUERYALLU:$QUERYALLT:$QUERYALL
 
 mkdir -p $img
-for period in 6h 1day 1week 1month 1year
+for period in 6h 1day 1week 1month 1year 2year
 do
-        time=`echo ${period} |sed 's/1//g'`
-        period=`echo -n '-'; echo ${period}`
-	$rrdtool graph $img/dnsall-${time}.png -s ${period} \
+        time="`echo ${period} |sed 's/1//g' |sed 's/6h/6 hours/g' |sed 's/2year/2 years/g'`"
+        period1=`echo -n '-'; echo ${period}`
+        period2=`echo ${period} |sed 's/1//g'`
+	$rrdtool graph $img/dnsall-${period2}.png -s ${period1} \
 	-t "ALL DNS Service traffic for the last ${time}" -z \
 	-c "BACK#FFFFFF" -c "SHADEA#FFFFFF" -c "SHADEB#FFFFFF" \
 	-c "MGRID#AAAAAA" -c "GRID#CCCCCC" -c "ARROW#333333" \
@@ -119,7 +120,7 @@ do
         "COMMENT:                                                            Last Updated\: $CURRENTTIME \l" > /dev/null
 
 
-	$rrdtool graph $img/network-${time}.png -s -1${period} \
+	$rrdtool graph $img/network-${period2}.png -s -1${period1} \
 	-t "DNS Service traffic for the last ${time}" -z \
 	-c "BACK#FFFFFF" -c "SHADEA#FFFFFF" -c "SHADEB#FFFFFF" \
 	-c "MGRID#AAAAAA" -c "GRID#CCCCCC" -c "ARROW#333333" \
@@ -211,14 +212,15 @@ do
         "COMMENT:                                                            Last Updated\: $CURRENTTIME \l" > /dev/null
 done
 
-for period in 6h 1day 1week 1month 1year
+for period in 6h 1day 1week 1month 1year 2year
 do
     for server in ns1 ns2 ns3 ns4
     do
         period1=`echo -n '-'; echo ${period}`
         period2=`echo ${period} |sed 's/1//g'`
+        time="`echo ${period} |sed 's/1//g' |sed 's/6h/6 hours/g' |sed 's/2year/2 years/g'`"
         $rrdtool graph $img/dns${server}-${period2}.png -s ${period1} \
-            -t "${server}.mattrude.com DNS traffic for the last ${period2}" -z \
+            -t "${server}.mattrude.com DNS traffic for the last ${time}" -z \
             -c "BACK#FFFFFF" -c "SHADEA#FFFFFF" -c "SHADEB#FFFFFF" \
             -c "MGRID#AAAAAA" -c "GRID#CCCCCC" -c "ARROW#333333" \
             -c "FONT#333333" -c "AXIS#333333" -c "FRAME#333333" \
@@ -308,5 +310,6 @@ $rrdtool graph $img/queries-small.png -s -6h -z \
     "LINE1:ns2#FF0000" \
     "LINE1:ns3#2AB352" \
     "LINE1:ns4#ff9900" \
-    "LINE1:all#000000" > /dev/null
+    "LINE1:all#000000" \
+    "COMMENT:                                                                Last Updated\: $CURRENTTIME \l" > /dev/null
 
