@@ -1,11 +1,11 @@
 # Site settings
-title: Matt's Personal Authoritative DNS Service
+title: My Personal Authoritative DNS Service
 email: matt@mattrude.com
 description: ""
-url: "http://ns1.mattrude.com"
+url: ""
 name: "ns1.mattrude.com"
 baseurl: ""
-destination: "/var/www/bind"
+destination: "/var/www/ns.mattrude.com"
 
 owner_name: "Matt Rude"
 owner_pgpkey: "0xc4909ee495b0761f"
