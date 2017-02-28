@@ -22,7 +22,7 @@ This site is maintained by [Matt Rude](http://mattrude.com). If you would like t
     pub = nistp256/03305F35 2015-02-15
     fingerprint = 77F1 D65B 5FF0 54DC 9286  6078 0314 CD85 0330 5F35
 
-* You may validate my keys using one of my [DANE](http://keyserver.mattrude.com/guides/dns-dane-cert-records/) or [PKA](http://keyserver.mattrude.com/guides/dns-dane-cert-records//guides/public-key-association/) DNS records.
+* You may validate my keys using one of my [DANE](http://keyserver.mattrude.com/guides/dns-dane-cert-records/) or [PKA](http://keyserver.mattrude.com/guides/public-key-association/) DNS records.
 
 ### Signed Contact Information
 

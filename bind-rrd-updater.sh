@@ -4,7 +4,8 @@ RRDDIR="/var/lib/rrd"
 img="/var/www/bind-img/"
 rrdtool=/usr/bin/rrdtool
 RRDDB="${RRDDIR}/dns.rrd"
-CURRENTTIME=`TZ='UTC' date |sed 's/\:/\\\:/g'`
+#CURRENTTIME=`TZ='UTC' date |sed 's/\:/\\\:/g'`
+CURRENTTIME=`date |sed 's/\:/\\\:/g'`
 
 sleep $[ ( $RANDOM % 10 )  + 1 ]s
 
@@ -13,14 +14,24 @@ if [ ! -e $RRDDB ]; then
     $rrdtool create $RRDDB --step 300 \
 	DS:ns1u:COUNTER:600:0:100000 \
 	DS:ns1t:COUNTER:600:0:100000 \
+	DS:ns1s:COUNTER:600:0:100000 \
+	DS:ns1x:COUNTER:600:0:100000 \
 	DS:ns2u:COUNTER:600:0:100000 \
 	DS:ns2t:COUNTER:600:0:100000 \
+	DS:ns2s:COUNTER:600:0:100000 \
+	DS:ns2x:COUNTER:600:0:100000 \
 	DS:ns3u:COUNTER:600:0:100000 \
 	DS:ns3t:COUNTER:600:0:100000 \
+	DS:ns3s:COUNTER:600:0:100000 \
+	DS:ns3x:COUNTER:600:0:100000 \
 	DS:ns4u:COUNTER:600:0:100000 \
 	DS:ns4t:COUNTER:600:0:100000 \
+	DS:ns4s:COUNTER:600:0:100000 \
+	DS:ns4x:COUNTER:600:0:100000 \
 	DS:allu:COUNTER:600:0:100000 \
 	DS:allt:COUNTER:600:0:100000 \
+	DS:alls:COUNTER:600:0:100000 \
+	DS:allx:COUNTER:600:0:100000 \
 	DS:all:COUNTER:600:0:100000 \
 	RRA:AVERAGE:0.5:1:600 \
 	RRA:AVERAGE:0.5:6:672 \
@@ -30,21 +41,30 @@ if [ ! -e $RRDDB ]; then
 fi
 
 mkdir -p /tmp
-for HOST in ns1 ns2 ns3 ns4
+#for HOST in ns1 ns2 ns3 ns4
+for HOST in ns1 ns2 
 do
     curl -sL http://${HOST}.mattrude.com:8053/json > /tmp/${HOST}
 done
 
 NS1QUDP=`cat /tmp/ns1 |jq .nsstats.QryUDP`
 NS1QTCP=`cat /tmp/ns1 |jq .nsstats.QryTCP`
+NS1QSUC=`cat /tmp/ns1 |jq .nsstats.QrySuccess`
+NS1QNXR=`cat /tmp/ns1 |jq .nsstats.QryNxrrset`
 NS2QUDP=`cat /tmp/ns2 |jq .nsstats.QryUDP`
 NS2QTCP=`cat /tmp/ns2 |jq .nsstats.QryTCP`
-NS3QUDP=`cat /tmp/ns3 |jq .nsstats.QryUDP`
-NS3QTCP=`cat /tmp/ns3 |jq .nsstats.QryTCP`
-NS4QUDP=`cat /tmp/ns4 |jq .nsstats.QryUDP`
-NS4QTCP=`cat /tmp/ns4 |jq .nsstats.QryTCP`
+NS2QSUC=`cat /tmp/ns2 |jq .nsstats.QrySuccess`
+NS2QNXR=`cat /tmp/ns2 |jq .nsstats.QryNxrrset`
+#NS3QUDP=`cat /tmp/ns3 |jq .nsstats.QryUDP`
+#NS3QTCP=`cat /tmp/ns3 |jq .nsstats.QryTCP`
+#NS3QSUC=`cat /tmp/ns3 |jq .nsstats.QrySuccess`
+#NS3QNXR=`cat /tmp/ns3 |jq .nsstats.QryNxrrset`
+#NS4QUDP=`cat /tmp/ns4 |jq .nsstats.QryUDP`
+#NS4QTCP=`cat /tmp/ns4 |jq .nsstats.QryTCP`
+#NS4QSUC=`cat /tmp/ns4 |jq .nsstats.QrySuccess`
+#NS4QNXR=`cat /tmp/ns4 |jq .nsstats.QryNxrrset`
 
-#rm -f /tmp/ns1 /tmp/ns2 /tmp/ns3 /tmp/ns4
+rm -f /tmp/ns1 /tmp/ns2 /tmp/ns3 /tmp/ns4
 
 if [ -z "${NS1QUDP}" ]; then NS1QUDP=0; fi
 if [ -z "${NS1QTCP}" ]; then NS1QTCP=0; fi
@@ -55,6 +75,7 @@ if [ -z "${NS3QTCP}" ]; then NS3QTCP=0; fi
 if [ -z "${NS4QUDP}" ]; then NS4QUDP=0; fi
 if [ -z "${NS4QTCP}" ]; then NS4QTCP=0; fi
 
+
 if [ "${NS1QUDP}" == "null" ]; then NS1QUDP=0; fi
 if [ "${NS1QTCP}" == "null" ]; then NS1QTCP=0; fi
 if [ "${NS2QUDP}" == "null" ]; then NS2QUDP=0; fi
@@ -64,13 +85,19 @@ if [ "${NS3QTCP}" == "null" ]; then NS3QTCP=0; fi
 if [ "${NS4QUDP}" == "null" ]; then NS4QUDP=0; fi
 if [ "${NS4QTCP}" == "null" ]; then NS4QTCP=0; fi
 
+if [ -z "${NS1QSUC}" ]; then NS1QSUC=0; fi
+if [ -z "${NS1QNXR}" ]; then NS1QNXR=0; fi
+if [ "${NS1QSUC}" == "null" ]; then NS1QSUC=0; fi
+if [ "${NS1QNXR}" == "null" ]; then NS1QNXR=0; fi
+
+
 QUERYALL="$(($NS1QUDP+$NS1QTCP+$NS2QUDP+$NS2QTCP+$NS3QUDP+$NS3QTCP+$NS4QUDP+$NS4QTCP))"
 QUERYALLU="$(($NS1QUDP+$NS2QUDP+$NS3QUDP+$NS4QUDP))"
 QUERYALLT="$(($NS1QTCP+$NS2QTCP+$NS3QTCP+$NS4QTCP))"
 #echo "$NS1QUDP $NS1QTCP $NS2QUDP $NS2QTCP $NS3QUDP $NS3QTCP $NS4QUDP $NS4QTCP $QUERYALLU $QUERYALLT $QUERYALL"
 
 mkdir -p $RRDDIR
-$rrdtool update $RRDDB -t ns1u:ns1t:ns2u:ns2t:ns3u:ns3t:ns4u:ns4t:allu:allt:all N:$NS1QUDP:$NS1QTCP:$NS2QUDP:$NS2QTCP:$NS3QUDP:$NS3QTCP:$NS4QUDP:$NS4QTCP:$QUERYALLU:$QUERYALLT:$QUERYALL
+$rrdtool update $RRDDB -t ns1u:ns1t:ns1s:ns1x:ns2u:ns2t:ns3u:ns3t:ns4u:ns4t:allu:allt:all N:$NS1QUDP:$NS1QTCP:$NS1QSUC:$NS1QNXR:$NS2QUDP:$NS2QTCP:$NS3QUDP:$NS3QTCP:$NS4QUDP:$NS4QTCP:$QUERYALLU:$QUERYALLT:$QUERYALL
 
 mkdir -p $img
 for period in 6h 1day 1week 1month 1year 2year
@@ -296,16 +323,16 @@ $rrdtool graph $img/queries-small.png -s -6h -z \
     -c "MGRID#AAAAAA" -c "GRID#CCCCCC" -c "ARROW#333333" \
     -c "FONT#333333" -c "AXIS#333333" -c "FRAME#333333" \
     -h 150 -w 690 -l 0 -a PNG \
-    DEF:ns1s=$RRDDB:ns1u:AVERAGE \
-    DEF:ns2s=$RRDDB:ns2u:AVERAGE \
-    DEF:ns3s=$RRDDB:ns3u:AVERAGE \
-    DEF:ns4s=$RRDDB:ns4u:AVERAGE \
-    DEF:alls=$RRDDB:all:AVERAGE \
-    CDEF:ns1=ns1s,60,* \
-    CDEF:ns2=ns2s,60,* \
-    CDEF:ns3=ns3s,60,* \
-    CDEF:ns4=ns4s,60,* \
-    CDEF:all=alls,60,* \
+    DEF:ns1sm=$RRDDB:ns1u:AVERAGE \
+    DEF:ns2sm=$RRDDB:ns2u:AVERAGE \
+    DEF:ns3sm=$RRDDB:ns3u:AVERAGE \
+    DEF:ns4sm=$RRDDB:ns4u:AVERAGE \
+    DEF:allsm=$RRDDB:all:AVERAGE \
+    CDEF:ns1=ns1sm,60,* \
+    CDEF:ns2=ns2sm,60,* \
+    CDEF:ns3=ns3sm,60,* \
+    CDEF:ns4=ns4sm,60,* \
+    CDEF:all=allsm,60,* \
     "LINE1:ns1#000099" \
     "LINE1:ns2#FF0000" \
     "LINE1:ns3#2AB352" \

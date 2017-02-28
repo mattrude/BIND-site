@@ -1,0 +1,17 @@
+---
+layout: default
+path: /ns3/
+---
+
+<h2>Service Changelog</h2>
+<div id="news">
+<p>Below you will find the changelog for this Authoritative DNS Service on host ns3.mattrude.com.</p>
+<ul>
+  {% for post in site.categories.NS3 %}
+    <li>
+      <h3><div id="category" class="{{ post.category }}">{{ post.category }}</div> {{ post.date | date: '%Y-%b-%d' }} - <a href="{{ post.url | remove_first:'/'}}">{{ post.title }}</a></h3>
+      {{ post.excerpt }}
+    </li>
+  {% endfor %}
+</ul>
+</div>
