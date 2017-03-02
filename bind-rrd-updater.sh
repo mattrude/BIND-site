@@ -42,7 +42,7 @@ fi
 
 mkdir -p /tmp
 #for HOST in ns1 ns2 ns3 ns4
-for HOST in ns1 ns2 
+for HOST in ns1 ns2 ns3
 do
     curl -sL http://${HOST}.mattrude.com:8053/json > /tmp/${HOST}
 done
@@ -55,49 +55,63 @@ NS2QUDP=`cat /tmp/ns2 |jq .nsstats.QryUDP`
 NS2QTCP=`cat /tmp/ns2 |jq .nsstats.QryTCP`
 NS2QSUC=`cat /tmp/ns2 |jq .nsstats.QrySuccess`
 NS2QNXR=`cat /tmp/ns2 |jq .nsstats.QryNxrrset`
-#NS3QUDP=`cat /tmp/ns3 |jq .nsstats.QryUDP`
-#NS3QTCP=`cat /tmp/ns3 |jq .nsstats.QryTCP`
-#NS3QSUC=`cat /tmp/ns3 |jq .nsstats.QrySuccess`
-#NS3QNXR=`cat /tmp/ns3 |jq .nsstats.QryNxrrset`
+NS3QUDP=`cat /tmp/ns3 |jq .nsstats.QryUDP`
+NS3QTCP=`cat /tmp/ns3 |jq .nsstats.QryTCP`
+NS3QSUC=`cat /tmp/ns3 |jq .nsstats.QrySuccess`
+NS3QNXR=`cat /tmp/ns3 |jq .nsstats.QryNxrrset`
 #NS4QUDP=`cat /tmp/ns4 |jq .nsstats.QryUDP`
 #NS4QTCP=`cat /tmp/ns4 |jq .nsstats.QryTCP`
 #NS4QSUC=`cat /tmp/ns4 |jq .nsstats.QrySuccess`
 #NS4QNXR=`cat /tmp/ns4 |jq .nsstats.QryNxrrset`
 
-rm -f /tmp/ns1 /tmp/ns2 /tmp/ns3 /tmp/ns4
 
 if [ -z "${NS1QUDP}" ]; then NS1QUDP=0; fi
 if [ -z "${NS1QTCP}" ]; then NS1QTCP=0; fi
+if [ -z "${NS1QSUC}" ]; then NS1QSUC=0; fi
+if [ -z "${NS1QNXR}" ]; then NS1QNXR=0; fi
 if [ -z "${NS2QUDP}" ]; then NS2QUDP=0; fi
 if [ -z "${NS2QTCP}" ]; then NS2QTCP=0; fi
+if [ -z "${NS2QSUC}" ]; then NS2QSUC=0; fi
+if [ -z "${NS2QNXR}" ]; then NS2QNXR=0; fi
 if [ -z "${NS3QUDP}" ]; then NS3QUDP=0; fi
 if [ -z "${NS3QTCP}" ]; then NS3QTCP=0; fi
+if [ -z "${NS3QSUC}" ]; then NS3QSUC=0; fi
+if [ -z "${NS3QNXR}" ]; then NS3QNXR=0; fi
 if [ -z "${NS4QUDP}" ]; then NS4QUDP=0; fi
 if [ -z "${NS4QTCP}" ]; then NS4QTCP=0; fi
+if [ -z "${NS4QSUC}" ]; then NS4QSUC=0; fi
+if [ -z "${NS4QNXR}" ]; then NS4QNXR=0; fi
 
 
 if [ "${NS1QUDP}" == "null" ]; then NS1QUDP=0; fi
 if [ "${NS1QTCP}" == "null" ]; then NS1QTCP=0; fi
-if [ "${NS2QUDP}" == "null" ]; then NS2QUDP=0; fi
-if [ "${NS2QTCP}" == "null" ]; then NS2QTCP=0; fi
-if [ "${NS3QUDP}" == "null" ]; then NS3QUDP=0; fi
-if [ "${NS3QTCP}" == "null" ]; then NS3QTCP=0; fi
-if [ "${NS4QUDP}" == "null" ]; then NS4QUDP=0; fi
-if [ "${NS4QTCP}" == "null" ]; then NS4QTCP=0; fi
-
-if [ -z "${NS1QSUC}" ]; then NS1QSUC=0; fi
-if [ -z "${NS1QNXR}" ]; then NS1QNXR=0; fi
 if [ "${NS1QSUC}" == "null" ]; then NS1QSUC=0; fi
 if [ "${NS1QNXR}" == "null" ]; then NS1QNXR=0; fi
+if [ "${NS2QUDP}" == "null" ]; then NS2QUDP=0; fi
+if [ "${NS2QTCP}" == "null" ]; then NS2QTCP=0; fi
+if [ "${NS2QSUC}" == "null" ]; then NS2QSUC=0; fi
+if [ "${NS2QNXR}" == "null" ]; then NS2QNXR=0; fi
+if [ "${NS3QUDP}" == "null" ]; then NS3QUDP=0; fi
+if [ "${NS3QTCP}" == "null" ]; then NS3QTCP=0; fi
+if [ "${NS3QSUC}" == "null" ]; then NS3QSUC=0; fi
+if [ "${NS3QNXR}" == "null" ]; then NS3QNXR=0; fi
+if [ "${NS4QUDP}" == "null" ]; then NS4QUDP=0; fi
+if [ "${NS4QTCP}" == "null" ]; then NS4QTCP=0; fi
+if [ "${NS4QSUC}" == "null" ]; then NS4QSUC=0; fi
+if [ "${NS4QNXR}" == "null" ]; then NS4QNXR=0; fi
 
 
 QUERYALL="$(($NS1QUDP+$NS1QTCP+$NS2QUDP+$NS2QTCP+$NS3QUDP+$NS3QTCP+$NS4QUDP+$NS4QTCP))"
 QUERYALLU="$(($NS1QUDP+$NS2QUDP+$NS3QUDP+$NS4QUDP))"
 QUERYALLT="$(($NS1QTCP+$NS2QTCP+$NS3QTCP+$NS4QTCP))"
-#echo "$NS1QUDP $NS1QTCP $NS2QUDP $NS2QTCP $NS3QUDP $NS3QTCP $NS4QUDP $NS4QTCP $QUERYALLU $QUERYALLT $QUERYALL"
+QUERYALLS="$(($NS1QSUC+$NS2QSUC+$NS3QSUC+$NS4QSUC))"
+QUERYALLX="$(($NS1QNXR+$NS2QNXR+$NS3QNXR+$NS4QNXR))"
 
 mkdir -p $RRDDIR
-$rrdtool update $RRDDB -t ns1u:ns1t:ns1s:ns1x:ns2u:ns2t:ns3u:ns3t:ns4u:ns4t:allu:allt:all N:$NS1QUDP:$NS1QTCP:$NS1QSUC:$NS1QNXR:$NS2QUDP:$NS2QTCP:$NS3QUDP:$NS3QTCP:$NS4QUDP:$NS4QTCP:$QUERYALLU:$QUERYALLT:$QUERYALL
+$rrdtool update $RRDDB -t ns1u:ns1t:ns1s:ns1x:ns2u:ns2t:ns3u:ns3t:ns4u:ns4t:allu:allt:alls:allx:all N:$NS1QUDP:$NS1QTCP:$NS1QSUC:$NS1QNXR:$NS2QUDP:$NS2QTCP:$NS3QUDP:$NS3QTCP:$NS4QUDP:$NS4QTCP:$QUERYALLU:$QUERYALLT:$QUERYALLS:$QUERYALLX:$QUERYALL
+
+/root/bind-status-site/bind-rrd-rrtype-updater.sh ns1
+/root/bind-status-site/bind-rrd-rrtype-updater.sh ns2
 
 mkdir -p $img
 for period in 6h 1day 1week 1month 1year 2year
@@ -138,7 +152,6 @@ do
         "GPRINT:maxallu:%5.1lf %s   \l" \
         "COMMENT:   " \
         "LINE2:allt#000099:TCP Queries  " \
-        "LINE1:allt#000099" \
         "GPRINT:lstallt:%5.1lf %s   " \
         "GPRINT:avgallt:%5.1lf %s   " \
         "GPRINT:minallt:%5.1lf %s   " \
@@ -197,7 +210,7 @@ do
 	"COMMENT:Total     \l" \
 	"COMMENT:   " \
 	"LINE1:ns1u#0000FF:NS1  " \
-	"LINE1:ns1u#0000FF" \
+	"LINE2:ns1u#0000FF" \
 	"GPRINT:lstns1u:%5.1lf %s   " \
 	"GPRINT:avgns1u:%5.1lf %s   " \
 	"GPRINT:minns1u:%5.1lf %s   " \
@@ -205,7 +218,7 @@ do
 	"GPRINT:totns1u:%5.1lf %s   \l" \
 	"COMMENT:   " \
         "LINE1:ns2u#FF0000:NS2  " \
-        "LINE1:ns2u#FF0000" \
+        "LINE2:ns2u#FF0000" \
         "GPRINT:lstns2u:%5.1lf %s   " \
         "GPRINT:avgns2u:%5.1lf %s   " \
         "GPRINT:minns2u:%5.1lf %s   " \
@@ -213,7 +226,7 @@ do
         "GPRINT:totns2u:%5.1lf %s   \l" \
         "COMMENT:   " \
 	"LINE1:ns3u#2AB352:NS3  " \
-	"LINE1:ns3u#2AB352" \
+	"LINE2:ns3u#2AB352" \
 	"GPRINT:lstns3u:%5.1lf %s   " \
 	"GPRINT:avgns3u:%5.1lf %s   " \
 	"GPRINT:minns3u:%5.1lf %s   " \
@@ -221,15 +234,13 @@ do
 	"GPRINT:totns3u:%5.1lf %s   \l" \
         "COMMENT:   " \
         "LINE1:ns4u#ff9900:NS4  " \
-        "LINE1:ns4u#ff9900" \
+        "LINE2:ns4u#ff9900" \
         "GPRINT:lstns4u:%5.1lf %s   " \
         "GPRINT:avgns4u:%5.1lf %s   " \
         "GPRINT:minns4u:%5.1lf %s   " \
         "GPRINT:maxns4u:%5.1lf %s   " \
         "GPRINT:totns4u:%5.1lf %s   \l" \
-        "COMMENT:   " \
-        "LINE1:all#000000:ALL  " \
-        "LINE1:all#000000" \
+        "COMMENT:            " \
         "GPRINT:lstall:%5.1lf %s   " \
         "GPRINT:avgall:%5.1lf %s   " \
         "GPRINT:minall:%5.1lf %s   " \
@@ -340,3 +351,162 @@ $rrdtool graph $img/queries-small.png -s -6h -z \
     "LINE1:all#000000" \
     "COMMENT:                                                                Last Updated\: $CURRENTTIME \l" > /dev/null
 
+
+for HOST in ns1 ns2
+do
+    for period in 6h 1day 1week 1month 1year 2year
+    do
+        time="`echo ${period} |sed 's/1//g' |sed 's/6h/6 hours/g' |sed 's/2year/2 years/g'`"
+        period1=`echo -n '-'; echo ${period}`
+        period2=`echo ${period} |sed 's/1//g'`
+        $rrdtool graph $img/dnstype-${HOST}-${period2}.png -s ${period1} \
+        -t "DNS Service traffic by Resource Record on host ${HOST}.mattrue.com for the last ${time}" -z \
+        -c "BACK#FFFFFF" -c "SHADEA#FFFFFF" -c "SHADEB#FFFFFF" \
+        -c "MGRID#AAAAAA" -c "GRID#CCCCCC" -c "ARROW#333333" \
+        -c "FONT#333333" -c "AXIS#333333" -c "FRAME#333333" \
+        -h 200 -w 690 -l 0 -a PNG -v "Requests/minute" \
+        DEF:rrqrya=${RRDDIR}/${HOST}.rrd:qrya:AVERAGE \
+        DEF:rrqryaaaa=${RRDDIR}/${HOST}.rrd:qryaaaa:AVERAGE \
+        DEF:rrqrycname=${RRDDIR}/${HOST}.rrd:qrycname:AVERAGE \
+        DEF:rrqrydnskey=${RRDDIR}/${HOST}.rrd:qrydnskey:AVERAGE \
+        DEF:rrqryds=${RRDDIR}/${HOST}.rrd:qryds:AVERAGE \
+        DEF:rrqrymx=${RRDDIR}/${HOST}.rrd:qrymx:AVERAGE \
+        DEF:rrqryns=${RRDDIR}/${HOST}.rrd:qryns:AVERAGE \
+        DEF:rrqrysoa=${RRDDIR}/${HOST}.rrd:qrysoa:AVERAGE \
+        DEF:rrqrysrv=${RRDDIR}/${HOST}.rrd:qrysrv:AVERAGE \
+        DEF:rrqrytlsa=${RRDDIR}/${HOST}.rrd:qrytlsa:AVERAGE \
+        DEF:rrqrytxt=${RRDDIR}/${HOST}.rrd:qrytxt:AVERAGE \
+        CDEF:qrya=rrqrya,60,* \
+        CDEF:qryaaaa=rrqryaaaa,60,* \
+        CDEF:qrycname=rrqrycname,60,* \
+        CDEF:qrydnskey=rrqrydnskey,60,* \
+        CDEF:qryds=rrqryds,60,* \
+        CDEF:qrymx=rrqrymx,60,* \
+        CDEF:qryns=rrqryns,60,* \
+        CDEF:qrysoa=rrqrysoa,60,* \
+        CDEF:qrysrv=rrqrysrv,60,* \
+        CDEF:qrytlsa=rrqrytlsa,60,* \
+        CDEF:qrytxt=rrqrytxt,60,* \
+        VDEF:minqrya=qrya,MINIMUM \
+        VDEF:minqryaaaa=qryaaaa,MINIMUM \
+        VDEF:minqrycname=qrycname,MINIMUM \
+        VDEF:minqrydnskey=qrydnskey,MINIMUM \
+        VDEF:minqryds=qryds,MINIMUM \
+        VDEF:minqrymx=qrymx,MINIMUM \
+        VDEF:minqryns=qryns,MINIMUM \
+        VDEF:minqrysoa=qrysoa,MINIMUM \
+        VDEF:minqrysrv=qrysrv,MINIMUM \
+        VDEF:minqrytlsa=qrytlsa,MINIMUM \
+        VDEF:minqrytxt=qrytxt,MINIMUM \
+        VDEF:maxqrya=qrya,MAXIMUM \
+        VDEF:maxqryaaaa=qryaaaa,MAXIMUM \
+        VDEF:maxqrycname=qrycname,MAXIMUM \
+        VDEF:maxqrydnskey=qrydnskey,MAXIMUM \
+        VDEF:maxqryds=qryds,MAXIMUM \
+        VDEF:maxqrymx=qrymx,MAXIMUM \
+        VDEF:maxqryns=qryns,MAXIMUM \
+        VDEF:maxqrysoa=qrysoa,MAXIMUM \
+        VDEF:maxqrysrv=qrysrv,MAXIMUM \
+        VDEF:maxqrytlsa=qrytlsa,MAXIMUM \
+        VDEF:maxqrytxt=qrytxt,MAXIMUM \
+        VDEF:avgqrya=qrya,AVERAGE \
+        VDEF:avgqryaaaa=qryaaaa,AVERAGE \
+        VDEF:avgqrycname=qrycname,AVERAGE \
+        VDEF:avgqrydnskey=qrydnskey,AVERAGE \
+        VDEF:avgqryds=qryds,AVERAGE \
+        VDEF:avgqrymx=qrymx,AVERAGE \
+        VDEF:avgqryns=qryns,AVERAGE \
+        VDEF:avgqrysoa=qrysoa,AVERAGE \
+        VDEF:avgqrysrv=qrysrv,AVERAGE \
+        VDEF:avgqrytlsa=qrytlsa,AVERAGE \
+        VDEF:avgqrytxt=qrytxt,AVERAGE \
+        VDEF:lstqrya=qrya,LAST \
+        VDEF:lstqryaaaa=qryaaaa,LAST \
+        VDEF:lstqrycname=qrycname,LAST \
+        VDEF:lstqrydnskey=qrydnskey,LAST \
+        VDEF:lstqryds=qryds,LAST \
+        VDEF:lstqrymx=qrymx,LAST \
+        VDEF:lstqryns=qryns,LAST \
+        VDEF:lstqrysoa=qrysoa,LAST \
+        VDEF:lstqrysrv=qrysrv,LAST \
+        VDEF:lstqrytlsa=qrytlsa,LAST \
+        VDEF:lstqrytxt=qrytxt,LAST \
+        "COMMENT: \l" \
+        "COMMENT:                      " \
+        "COMMENT:Current   " \
+        "COMMENT:Average   " \
+        "COMMENT:Minimum   " \
+        "COMMENT:Maximum   \l" \
+        "COMMENT:   " \
+        "AREA:qrya#008000:     A Queries  :STACK" \
+        "GPRINT:lstqrya:%5.1lf %s   " \
+        "GPRINT:avgqrya:%5.1lf %s   " \
+        "GPRINT:minqrya:%5.1lf %s   " \
+        "GPRINT:maxqrya:%5.1lf %s   \l" \
+        "COMMENT:   " \
+        "AREA:qryaaaa#008040:  AAAA Queries  :STACK" \
+        "GPRINT:lstqryaaaa:%5.1lf %s   " \
+        "GPRINT:avgqryaaaa:%5.1lf %s   " \
+        "GPRINT:minqryaaaa:%5.1lf %s   " \
+        "GPRINT:maxqryaaaa:%5.1lf %s   \l" \
+        "COMMENT:   " \
+        "AREA:qrycname#008080: CNAME Queries  :STACK" \
+        "GPRINT:lstqrycname:%5.1lf %s   " \
+        "GPRINT:avgqrycname:%5.1lf %s   " \
+        "GPRINT:minqrycname:%5.1lf %s   " \
+        "GPRINT:maxqrycname:%5.1lf %s   \l" \
+        "COMMENT:   " \
+        "AREA:qrydnskey#004080:DNSKEY Queries  :STACK" \
+        "GPRINT:lstqrydnskey:%5.1lf %s   " \
+        "GPRINT:avgqrydnskey:%5.1lf %s   " \
+        "GPRINT:minqrydnskey:%5.1lf %s   " \
+        "GPRINT:maxqrydnskey:%5.1lf %s   \l" \
+        "COMMENT:   " \
+        "AREA:qryds#000080:    DS Queries  :STACK" \
+        "GPRINT:lstqryds:%5.1lf %s   " \
+        "GPRINT:avgqryds:%5.1lf %s   " \
+        "GPRINT:minqryds:%5.1lf %s   " \
+        "GPRINT:maxqryds:%5.1lf %s   \l" \
+        "COMMENT:   " \
+        "AREA:qrymx#400080:    MX Queries  :STACK" \
+        "GPRINT:lstqrymx:%5.1lf %s   " \
+        "GPRINT:avgqrymx:%5.1lf %s   " \
+        "GPRINT:minqrymx:%5.1lf %s   " \
+        "GPRINT:maxqrymx:%5.1lf %s   \l" \
+        "COMMENT:   " \
+        "AREA:qryns#800080:    NS Queries  :STACK" \
+        "GPRINT:lstqryns:%5.1lf %s   " \
+        "GPRINT:avgqryns:%5.1lf %s   " \
+        "GPRINT:minqryns:%5.1lf %s   " \
+        "GPRINT:maxqryns:%5.1lf %s   \l" \
+        "COMMENT:   " \
+        "AREA:qrysoa#800040:   SOA Queries  :STACK" \
+        "GPRINT:lstqrysoa:%5.1lf %s   " \
+        "GPRINT:avgqrysoa:%5.1lf %s   " \
+        "GPRINT:minqrysoa:%5.1lf %s   " \
+        "GPRINT:maxqrysoa:%5.1lf %s   \l" \
+        "COMMENT:   " \
+        "AREA:qrysrv#800000:   SRV Queries  :STACK" \
+        "GPRINT:lstqrysrv:%5.1lf %s   " \
+        "GPRINT:avgqrysrv:%5.1lf %s   " \
+        "GPRINT:minqrysrv:%5.1lf %s   " \
+        "GPRINT:maxqrysrv:%5.1lf %s   \l" \
+        "COMMENT:   " \
+        "AREA:qrytlsa#804000:  TLSA Queries  :STACK" \
+        "GPRINT:lstqrytlsa:%5.1lf %s   " \
+        "GPRINT:avgqrytlsa:%5.1lf %s   " \
+        "GPRINT:minqrytlsa:%5.1lf %s   " \
+        "GPRINT:maxqrytlsa:%5.1lf %s   \l" \
+        "COMMENT:   " \
+        "AREA:qrytxt#808000:   TXT Queries  :STACK" \
+        "GPRINT:lstqrytxt:%5.1lf %s   " \
+        "GPRINT:avgqrytxt:%5.1lf %s   " \
+        "GPRINT:minqrytxt:%5.1lf %s   " \
+        "GPRINT:maxqrytxt:%5.1lf %s   \l" \
+        "COMMENT: \l" \
+        "COMMENT:                                                            Last Updated\: $CURRENTTIME \l" > /dev/null
+    done
+done
+
+
+rm -f /tmp/ns1 /tmp/ns2 /tmp/ns3 /tmp/ns4
