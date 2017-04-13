@@ -112,6 +112,7 @@ $rrdtool update $RRDDB -t ns1u:ns1t:ns1s:ns1x:ns2u:ns2t:ns3u:ns3t:ns4u:ns4t:allu
 
 /root/bind-status-site/bind-rrd-rrtype-updater.sh ns1
 /root/bind-status-site/bind-rrd-rrtype-updater.sh ns2
+/root/bind-status-site/bind-rrd-rrtype-updater.sh ns3
 
 mkdir -p $img
 for period in 6h 1day 1week 1month 1year 2year
@@ -170,37 +171,37 @@ do
 	DEF:ns2us=$RRDDB:ns2u:AVERAGE \
 	DEF:ns3us=$RRDDB:ns3u:AVERAGE \
 	DEF:ns4us=$RRDDB:ns4u:AVERAGE \
-	DEF:alls=$RRDDB:all:AVERAGE \
+	DEF:allus=$RRDDB:allu:AVERAGE \
         CDEF:ns1u=ns1us,60,* \
         CDEF:ns2u=ns2us,60,* \
         CDEF:ns3u=ns3us,60,* \
         CDEF:ns4u=ns4us,60,* \
-        CDEF:all=alls,60,* \
+        CDEF:allu=allus,60,* \
 	VDEF:minns1u=ns1u,MINIMUM \
 	VDEF:minns2u=ns2u,MINIMUM \
 	VDEF:minns3u=ns3u,MINIMUM \
 	VDEF:minns4u=ns4u,MINIMUM \
-	VDEF:minall=all,MINIMUM \
+	VDEF:minallu=allu,MINIMUM \
 	VDEF:maxns1u=ns1u,MAXIMUM \
 	VDEF:maxns2u=ns2u,MAXIMUM \
 	VDEF:maxns3u=ns3u,MAXIMUM \
 	VDEF:maxns4u=ns4u,MAXIMUM \
-	VDEF:maxall=all,MAXIMUM \
+	VDEF:maxallu=allu,MAXIMUM \
 	VDEF:avgns1u=ns1u,AVERAGE \
 	VDEF:avgns2u=ns2u,AVERAGE \
 	VDEF:avgns3u=ns3u,AVERAGE \
 	VDEF:avgns4u=ns4u,AVERAGE \
-	VDEF:avgall=all,AVERAGE \
+	VDEF:avgallu=allu,AVERAGE \
 	VDEF:lstns1u=ns1u,LAST \
 	VDEF:lstns2u=ns2u,LAST \
 	VDEF:lstns3u=ns3u,LAST \
 	VDEF:lstns4u=ns4u,LAST \
-	VDEF:lstall=all,LAST \
+	VDEF:lstallu=allu,LAST \
 	VDEF:totns1u=ns1u,TOTAL \
 	VDEF:totns2u=ns2u,TOTAL \
 	VDEF:totns3u=ns3u,TOTAL \
 	VDEF:totns4u=ns4u,TOTAL \
-	VDEF:totall=all,TOTAL \
+	VDEF:totallu=allu,TOTAL \
 	"COMMENT: \l" \
 	"COMMENT:            " \
 	"COMMENT:Current   " \
@@ -209,43 +210,40 @@ do
 	"COMMENT:Maximum   " \
 	"COMMENT:Total     \l" \
 	"COMMENT:   " \
-	"LINE1:ns1u#0000FF:NS1  " \
-	"LINE2:ns1u#0000FF" \
+	"AREA:ns1u#0000FF:NS1  :STACK" \
 	"GPRINT:lstns1u:%5.1lf %s   " \
 	"GPRINT:avgns1u:%5.1lf %s   " \
 	"GPRINT:minns1u:%5.1lf %s   " \
 	"GPRINT:maxns1u:%5.1lf %s   " \
 	"GPRINT:totns1u:%5.1lf %s   \l" \
 	"COMMENT:   " \
-        "LINE1:ns2u#FF0000:NS2  " \
-        "LINE2:ns2u#FF0000" \
+        "AREA:ns2u#FF0000:NS2  :STACK" \
         "GPRINT:lstns2u:%5.1lf %s   " \
         "GPRINT:avgns2u:%5.1lf %s   " \
         "GPRINT:minns2u:%5.1lf %s   " \
         "GPRINT:maxns2u:%5.1lf %s   " \
         "GPRINT:totns2u:%5.1lf %s   \l" \
         "COMMENT:   " \
-	"LINE1:ns3u#2AB352:NS3  " \
-	"LINE2:ns3u#2AB352" \
+	"AREA:ns3u#2AB352:NS3  :STACK" \
 	"GPRINT:lstns3u:%5.1lf %s   " \
 	"GPRINT:avgns3u:%5.1lf %s   " \
 	"GPRINT:minns3u:%5.1lf %s   " \
 	"GPRINT:maxns3u:%5.1lf %s   " \
 	"GPRINT:totns3u:%5.1lf %s   \l" \
         "COMMENT:   " \
-        "LINE1:ns4u#ff9900:NS4  " \
-        "LINE2:ns4u#ff9900" \
+        "AREA:ns4u#ff9900:NS4  :STACK" \
         "GPRINT:lstns4u:%5.1lf %s   " \
         "GPRINT:avgns4u:%5.1lf %s   " \
         "GPRINT:minns4u:%5.1lf %s   " \
         "GPRINT:maxns4u:%5.1lf %s   " \
         "GPRINT:totns4u:%5.1lf %s   \l" \
-        "COMMENT:            " \
-        "GPRINT:lstall:%5.1lf %s   " \
-        "GPRINT:avgall:%5.1lf %s   " \
-        "GPRINT:minall:%5.1lf %s   " \
-        "GPRINT:maxall:%5.1lf %s   " \
-        "GPRINT:totall:%5.1lf %s   \l" \
+        "COMMENT:   " \
+        "LINE1:allu#999999:ALL  " \
+        "GPRINT:lstallu:%5.1lf %s   " \
+        "GPRINT:avgallu:%5.1lf %s   " \
+        "GPRINT:minallu:%5.1lf %s   " \
+        "GPRINT:maxallu:%5.1lf %s   " \
+        "GPRINT:totallu:%5.1lf %s   \l" \
         "COMMENT: \l" \
         "COMMENT:                                                            Last Updated\: $CURRENTTIME \l" > /dev/null
 done
@@ -352,7 +350,7 @@ $rrdtool graph $img/queries-small.png -s -6h -z \
     "COMMENT:                                                                Last Updated\: $CURRENTTIME \l" > /dev/null
 
 
-for HOST in ns1 ns2
+for HOST in ns1 ns2 ns3
 do
     for period in 6h 1day 1week 1month 1year 2year
     do
